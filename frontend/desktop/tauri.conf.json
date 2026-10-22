@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Subh AI",
+  "version": "1.0.0",
+  "identifier": "ai.subh.desktop",
+  "build": {
+    "beforeDevCommand": "npm --prefix ../web run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "npm --prefix ../web run build",
+    "frontendDist": "../web/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Subh AI",
+        "width": 1180,
+        "height": 800,
+        "minWidth": 420,
+        "minHeight": 560,
+        "resizable": true,
+        "theme": null
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; connect-src 'self' http://127.0.0.1:8000 http://localhost:8000; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
+      "capabilities": []
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "dmg", "appimage"],
+    "shortDescription": "Permission-controlled AI agent",
+    "longDescription": "Subh AI requests actions; a permission layer decides whether they are allowed before anything runs."
+  }
+}

@@ -1,0 +1,58 @@
+# Subh AI — full stack.
+#
+# Not run in this repo's environment: Docker is not installed here, so this file
+# is written but unexercised. The same backend has been run and tested directly
+# with uvicorn against SQLite.
+
+services:
+  api:
+    build:
+      context: ./backend
+    env_file: .env
+    environment:
+      # Compose runs Postgres, so override the SQLite default.
+      DATABASE_URL: postgresql+asyncpg://agent:agent@postgres:5432/subh_ai
+      ENVIRONMENT: production
+      # Production refuses to start with insecure defaults, so these must be
+      # set in .env: SECRET_KEY, AUTH_ENABLED=true, DATA_ENCRYPTION_KEY.
+    ports:
+      - "8000:8000"
+    volumes:
+      # The agent workspace persists, so files it writes survive a restart.
+      - agent_workspace:/app/workspace
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: web/Dockerfile
+      args:
+        VITE_API_BASE: http://localhost:8000
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: subh_ai
+      POSTGRES_USER: agent
+      POSTGRES_PASSWORD: agent
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # The API waits for this, so it does not race the database on first boot.
+      test: ["CMD-SHELL", "pg_isready -U agent -d subh_ai"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  agent_workspace:

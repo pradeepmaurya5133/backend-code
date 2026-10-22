@@ -1,0 +1,16 @@
+{
+  "name": "subh-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Subh AI - a permission-controlled AI agent. Repo-root entry points; the web client lives in frontend/web.",
+  "scripts": {
+    "dev": "npm --prefix frontend/web run dev",
+    "build": "npm --prefix frontend/web run build",
+    "preview": "npm --prefix frontend/web run preview",
+    "install:web": "npm --prefix frontend/web install",
+    "dev:mobile": "npm --prefix frontend/mobile run start"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

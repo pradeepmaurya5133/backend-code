@@ -1,0 +1,17 @@
+fastapi
+python-multipart
+uvicorn[standard]
+pydantic
+pydantic-settings
+sqlalchemy[asyncio]
+greenlet
+asyncpg
+python-dotenv
+httpx
+anthropic
+croniter
+cryptography
+pyjwt
+aiosqlite
+pytest
+pytest-asyncio
